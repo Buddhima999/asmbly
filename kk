@@ -518,4 +518,35 @@ exit:
        li $v0,10
        syscall
 ---------------------------------------------------------------------------------------------
+//get string input
+.data
+    msg1:   .asciiz "Enter your name: "
+    msg2:   .asciiz "Hello "
+    buffer: .space 20       # space for user input
 
+.text
+.globl main
+main:
+    # print "Enter your name:"
+    li $v0, 4
+    la $a0, msg1
+    syscall
+
+    # read string from user
+    li $v0, 8
+    la $a0, buffer      # store input in buffer
+    li $a1, 20          # max 20 characters
+    syscall
+
+    # print "Hello "
+    li $v0, 4
+    la $a0, msg2
+    syscall
+
+    # print what user typed
+    li $v0, 4
+    la $a0, buffer      # print buffer
+    syscall
+
+    li $v0, 10          # exit
+    syscall
