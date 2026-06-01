@@ -286,3 +286,236 @@ ExtractDigit:
 	div $a0, $t0
 	mfhi $v0
 	jr $ra
+-----------------------------------------------------------------------------------
+
+//Calculator
+.data
+	num1: .asciiz "Enter Number 1: "
+	num2: .asciiz "Enter Number 2: "
+	prompt: .asciiz "Menu\n  1-Addition\n  2-Subtraction\n  3-Multiplication\n  4-Division (Quontient)\n  5-Modulus (Reminder)\nSelect the operation from the Menu: "
+	msgAdd: .asciiz "+"
+	msgSub: .asciiz "-"
+	msgMul: .asciiz "x"
+	msgDiv: .asciiz "/"
+	msgMod: .asciiz "%"
+	msgEq: .asciiz "="
+	
+.text
+.globl main
+main:
+	li $v0, 4
+	la $a0, num1
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $t0, $v0
+	
+	li $v0, 4
+	la $a0, num2
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $t1, $v0
+	
+	li $v0, 4
+	la $a0, prompt
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $t2, $v0
+	
+	li $t3, 1
+	beq $t2, $t3, Addition
+	li $t3, 2
+	beq $t2, $t3, Subtraction
+	li $t3, 3
+	beq $t2, $t3, Multiplication
+	li $t3, 4
+	beq $t2, $t3, Division
+	li $t3, 5
+	beq $t2, $t3, Modulus
+	
+Addition:
+	add $t4, $t0, $t1
+	
+	li $v0, 1
+	move $a0, $t0
+	syscall
+	
+	li $v0, 4
+	la $a0, msgAdd
+	syscall
+	
+	li $v0, 1
+	move $a0, $t1
+	syscall
+	
+	li $v0, 4
+	la $a0, msgEq
+	syscall
+	
+	li $v0, 1
+	move $a0, $t4
+	syscall
+	
+	j exit
+	
+Subtraction:
+	sub $t4, $t0, $t1
+	
+	li $v0, 1
+	move $a0, $t0
+	syscall
+	
+	li $v0, 4
+	la $a0, msgSub
+	syscall
+	
+	li $v0, 1
+	move $a0, $t1
+	syscall
+	
+	li $v0, 4
+	la $a0, msgEq
+	syscall
+	
+	li $v0, 1
+	move $a0, $t4
+	syscall
+	
+	j exit
+	
+Multiplication:
+	mul $t4, $t0, $t1
+	
+	li $v0, 1
+	move $a0, $t0
+	syscall
+	
+	li $v0, 4
+	la $a0, msgMul
+	syscall
+	
+	li $v0, 1
+	move $a0, $t1
+	syscall
+	
+	li $v0, 4
+	la $a0, msgEq
+	syscall
+	
+	li $v0, 1
+	move $a0, $t4
+	syscall
+	
+	j exit
+	
+Division:
+	div $t0, $t1
+	mflo $t4
+	
+	li $v0, 1
+	move $a0, $t0
+	syscall
+	
+	li $v0, 4
+	la $a0, msgDiv
+	syscall
+	
+	li $v0, 1
+	move $a0, $t1
+	syscall
+	
+	li $v0, 4
+	la $a0, msgEq
+	syscall
+	
+	li $v0, 1
+	move $a0, $t4
+	syscall
+	
+	j exit
+	
+Modulus:
+	div $t0, $t1
+	mfhi $t4
+	
+	li $v0, 1
+	move $a0, $t0
+	syscall
+	
+	li $v0, 4
+	la $a0, msgMod
+	syscall
+	
+	li $v0, 1
+	move $a0, $t1
+	syscall
+	
+	li $v0, 4
+	la $a0, msgEq
+	syscall
+	
+	li $v0, 1
+	move $a0, $t4
+	syscall
+	
+	j exit
+	
+exit:
+	li $v0, 10
+	syscall
+----------------------------------------------------------------------------------------------
+
+//minimum integer of array
+.data
+   .align 2
+   arry: .word 100,10,3,-2,110,0,-50,150,-17,8
+   
+   size:  .word 10
+   msg:   .asciiz"smallest number: "
+   nl:    .asciiz"\n"
+   
+.text 
+.globl main
+ 
+    main:
+       la $s0,arry
+       lw $s1,size
+       
+       lw $t2,0($s0)
+       li $t3,1
+       
+    min_loop:
+       beq $t3,$s1,min_done
+       
+       sll $t4,$t3,2
+       add $t4,$s0,$t4
+       lw  $t5,0($t4)
+       
+       bge $t5,$t2,min_skip
+       move $t2,$t5
+       
+    min_skip:
+       addi $t3,$t3,1
+        j min_loop
+    min_done:
+       li $v0,4
+       la $a0,msg
+       syscall
+       
+       li $v0,1
+       move $a0,$t2
+       syscall
+       
+       li $v0,4
+       la $a0,nl
+       syscall
+       
+       li $v0,10
+       syscall
+---------------------------------------------------------------------------------------------
+
