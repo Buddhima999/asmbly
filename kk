@@ -337,3 +337,13 @@ public class User {
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+Array drop down
+public static void clickDropDown() {
+		Select select=new Select(driver.findElement(By.name("table_length")));
+		select.selectByIndex(2);
+		String option=select.getFirstSelectedOption().getText();
+		System.out.println(option);
+		
+		
+	}
